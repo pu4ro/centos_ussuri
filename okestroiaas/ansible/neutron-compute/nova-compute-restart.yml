@@ -1,0 +1,14 @@
+---
+  - name:  OpenStack compute service restart
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: nova-compute && ovs-agent restart
+      service:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - neutron-openvswitch-agent
+        - openstack-nova-compute

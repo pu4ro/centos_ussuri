@@ -1,0 +1,33 @@
+---
+  - name:  OpenStack Service_nova-api
+    hosts: controller01
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    environment:
+       OS_PROJECT_DOMAIN_NAME: Default
+       OS_USER_DOMAIN_NAME: Default
+       OS_PROJECT_NAME: admin
+       OS_USERNAME: admin
+       OS_PASSWORD: "{{ keystone_pass }}"
+       OS_AUTH_URL: http://{{ bind_ip }}:15000/v3/
+       OS_IDENTITY_API_VERSION: 3
+       OS_IMAGE_API_VERSION: 2
+    tasks:
+    - name: Create nova-api endpoints.
+      command: 'openstack endpoint create --region RegionOne compute {{ item.key }} {{ item.value }}' 
+      with_dict:
+        public: 'http://{{ bind_ip }}:18774/v2.1' 
+        internal: 'http://{{ bind_ip }}:18774/v2.1' 
+        admin: 'http://{{ bind_ip }}:18774/v2.1'
+        
+    
+    - name: Create placement endpoints.
+      command: 'openstack endpoint create --region RegionOne placement {{ item.key }} {{ item.value }}'
+      with_dict:
+        public: 'http://{{ bind_ip }}:18778'
+        internal: 'http://{{ bind_ip }}:18778'
+        admin: 'http://{{ bind_ip }}:18778'
+
+
+

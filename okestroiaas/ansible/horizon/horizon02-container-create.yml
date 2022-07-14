@@ -1,0 +1,53 @@
+---
+- name: create horizon container
+  hosts: "{{ yml_02_hosts }}"
+  become: true
+  vars_files:
+    - /home/ubuntu/cloudxpert/variable/horizon_vars/main.yml
+  tasks:
+  - name: Create Files Directory
+    file:
+      path: /root/files
+      state: directory
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: Copy configuration files
+    copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: "{{ item.owner }}"
+      group: "{{ item.group }}"
+      mode: "{{ item.mode }}"
+    with_items:
+      - { src: '/home/ubuntu/cloudxpert/ansible/horizon/files/sshd_config',dest: '/root/files',owner: 'root',group: 'root',mode: '0644'}
+      - { src: '/home/ubuntu/cloudxpert/ansible/horizon/files/ubuntu',dest: '/root/files',owner: 'root',group: 'root',mode: '0644'}
+      - { src: '/home/ubuntu/cloudxpert/ansible/horizon/files/authorized_keys',dest: '/root/files',owner: 'root',group: 'root',mode: '0600'}
+
+  - name: Template configuration files
+    template:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: "{{ item.owner }}"
+      group: "{{ item.group }}"
+      mode: "{{ item.mode }}"
+    with_items:
+      - { src: '/home/ubuntu/cloudxpert/ansible/horizon/template/horizon02-interfaces.j2',dest: '/root/files/interfaces',owner: 'root',group: 'root',mode: '0644'}
+      - { src: '/home/ubuntu/cloudxpert/ansible/horizon/template/sources.list.j2',dest: '/root/files/sources.list',owner: 'root',group: 'root',mode: '0644'}
+      - { src: '/home/ubuntu/cloudxpert/ansible/horizon/template/horizon02-create.sh.j2',dest: '/root/create.sh',owner: 'root',group: 'root',mode: '0755'}
+      - { src: '/home/ubuntu/cloudxpert/ansible/horizon/template/cloudarchive-ocata.list.j2',dest: '/root/files/cloudarchive-ocata.list',owner: 'root',group: 'root',mode: '0644'}
+
+  - name: create horizon container
+    shell: ./create.sh >> horizon.txt
+    args:
+      chdir: /root
+
+  - name: remove files and directories
+    file:
+      path: "{{ item }}"
+      state: absent
+    with_items:
+    - /root/create.sh
+    - /root/files/
+

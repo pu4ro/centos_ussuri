@@ -1,0 +1,9 @@
+---
+- name: Percona-XtraCluster-DB install
+  hosts: controller02,controller03
+  become: true
+  vars_files:
+    - /root/okestroiaas/variable/common_vars/main.yml
+  tasks:
+  - name: restart pxc non primary
+    service: name=mysql state=restarted

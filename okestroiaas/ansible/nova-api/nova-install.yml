@@ -1,0 +1,21 @@
+---
+  - name:  OpenStack Service_nova-api install
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: nova-api_pakage_install
+      yum:
+        name:
+          - openstack-nova-api
+          - openstack-nova-conductor
+          - openstack-nova-novncproxy
+          - openstack-nova-scheduler
+          - openstack-placement-api
+        state: present
+
+    - name: copy placement files
+      copy:
+        src: /root/okestroiaas/files/00-placement-api.conf
+        dest: /etc/httpd/conf.d/

@@ -1,0 +1,54 @@
+---
+  - name:  OpenStack Service_nova-api
+    hosts: controller01
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: Create DB
+      mysql_db:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - nova_api
+        - nova
+        - nova_cell0
+        - placement
+
+    - name: Update mysql nova-api password for all nova-api accounts
+      no_log: true
+      mysql_user:
+         name: nova
+         host: "{{ item.host }}"
+         password: "{{ db_password }}"
+         priv: '{{ item.db }}.*:ALL'
+         state: present
+         append_privs: yes
+      with_items:
+         - db: nova
+           host: localhost
+         - db: nova
+           host: '%'
+         - db: nova_api
+           host: localhost
+         - db: nova_api
+           host: '%'
+         - db: nova_cell0
+           host: localhost
+         - db: nova_cell0
+           host: '%'
+
+    - name: Update mysql placement password for all accounts
+      no_log: true
+      mysql_user:
+         name: placement
+         host: "{{ item.host }}"
+         password: "{{ db_password }}"
+         priv: '{{ item.db }}.*:ALL'
+         state: present
+         append_privs: yes
+      with_items:
+         - db: placement
+           host: localhost
+         - db: placement
+           host: '%'

@@ -1,0 +1,22 @@
+---
+- name: Rbbitmq_cluster 
+  hosts: controller01
+  become: true
+  vars_files:
+    - /root/okestroiaas/variable/common_vars/main.yml
+  tasks:
+  - name: service stop 
+    service:
+      name: rabbitmq-server
+      state: stopped
+
+  - name: rabbitmq01 pull cokie file
+    fetch: 
+      src: /var/lib/rabbitmq/.erlang.cookie
+      dest: /root/okestroiaas/files/erlang.cookie
+      flat: true  
+
+  - name: service start
+    service:
+      name: rabbitmq-server
+      state: started

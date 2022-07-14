@@ -1,0 +1,118 @@
+#---
+### Baremetal env setting 
+#- import_playbook: /root/okestroiaas/ansible/environment/server-init.yml
+#- import_playbook: /root/okestroiaas/ansible/environment/openstackclient-install.yml
+###
+#####  ## NTP Setting 
+#- import_playbook: /root/okestroiaas/ansible/chrony/chrony-install.yml
+#- import_playbook: /root/okestroiaas/ansible/chrony/chrony-primary-config-set.yml
+#- import_playbook: /root/okestroiaas/ansible/chrony/chrony-secondary-config-set.yml
+####
+#####  ## Memcached installation
+#- import_playbook: /root/okestroiaas/ansible/memcached/memcached-install.yml
+#- import_playbook: /root/okestroiaas/ansible/memcached/memcached-config.yml
+####
+####  ##rabbitmq installation
+#- import_playbook: /root/okestroiaas/ansible/rabbitmq/rabbitmq-install.yml
+#- import_playbook: /root/okestroiaas/ansible/rabbitmq/rabbitmq-set.yml
+#- import_playbook: /root/okestroiaas/ansible/rabbitmq/cookie-file-copy.yml
+#- import_playbook: /root/okestroiaas/ansible/rabbitmq/add_cluster.yml
+#- import_playbook: /root/okestroiaas/ansible/rabbitmq/set_policy_HA.yml
+####
+####  ## percona installation
+#- import_playbook: /root/okestroiaas/ansible/percona/install_password_setting.yml
+#- import_playbook: /root/okestroiaas/ansible/percona/config_setting.yml
+#- import_playbook: /root/okestroiaas/ansible/percona/primary_boot.yml
+#- import_playbook: /root/okestroiaas/ansible/percona/replication_user_create.yml
+#- import_playbook: /root/okestroiaas/ansible/percona/non_primary_boot.yml
+###
+###  ## haproxy setting
+#- import_playbook: /root/okestroiaas/ansible/haproxy/haproxy-install.yml
+#- import_playbook: /root/okestroiaas/ansible/haproxy/haproxy-config.yml
+#- import_playbook: /root/okestroiaas/ansible/haproxy/haproxy-pcs-allhost.yml
+#- import_playbook: /root/okestroiaas/ansible/haproxy/haproxy-pcs-mainhost.yml
+#- import_playbook: /root/okestroiaas/ansible/haproxy/haproxy-restart.yml
+###
+###  ## keystone installation
+#- import_playbook: /root/okestroiaas/ansible/keystone/keystone-database-create.yml
+#- import_playbook: /root/okestroiaas/ansible/keystone/keystone-install.yml
+#- import_playbook: /root/okestroiaas/ansible/keystone/keystone-config-set.yml
+#- import_playbook: /root/okestroiaas/ansible/keystone/keystone-dbsync.yml
+#- import_playbook: /root/okestroiaas/ansible/keystone/keystone-fernet-create.yml
+#- import_playbook: /root/okestroiaas/ansible/keystone/keystone-bootstrap.yml
+#- import_playbook: /root/okestroiaas/ansible/keystone/keystone-apache-setting.yml
+#- import_playbook: /root/okestroiaas/ansible/keystone/keystone-service-project-create.yml
+#- import_playbook: /root/okestroiaas/ansible/keystone/keystone-bash-sehll.yml
+#####
+#### glance installation
+#- import_playbook: /root/okestroiaas/ansible/glance/glance-database-create.yml
+#- import_playbook: /root/okestroiaas/ansible/glance/glance-install.yml
+#- import_playbook: /root/okestroiaas/ansible/glance/glance-openstack-init.yml
+#- import_playbook: /root/okestroiaas/ansible/glance/glance-endpoint.yml
+#- import_playbook: /root/okestroiaas/ansible/glance/glance-config-set.yml
+#- import_playbook: /root/okestroiaas/ansible/glance/glance-dbsync.yml
+#- import_playbook: /root/okestroiaas/ansible/glance/glance-restart.yml
+###
+##### nova-api installation
+#- import_playbook: /root/okestroiaas/ansible/nova-api/nova-database-create.yml
+#- import_playbook: /root/okestroiaas/ansible/nova-api/nova-openstack-init.yml
+#- import_playbook: /root/okestroiaas/ansible/nova-api/nova-endpoint.yml
+#- import_playbook: /root/okestroiaas/ansible/nova-api/nova-install.yml
+#- import_playbook: /root/okestroiaas/ansible/nova-api/nova-config-set.yml
+#- import_playbook: /root/okestroiaas/ansible/nova-api/nova-dbsync.yml
+#- import_playbook: /root/okestroiaas/ansible/nova-api/nova-restart.yml
+####
+##### nova-compute installation
+#- import_playbook: /root/okestroiaas/ansible/nova-compute/nova-install.yml
+#- import_playbook: /root/okestroiaas/ansible/nova-compute/nova-config-set.yml
+#- import_playbook: /root/okestroiaas/ansible/nova-compute/nova-restart.yml
+#- import_playbook: /root/okestroiaas/ansible/nova-compute/compute-discover.yml
+####
+#### neutron-server installation
+#- import_playbook: /root/okestroiaas/ansible/neutron-server/neutron-database-create.yml
+#- import_playbook: /root/okestroiaas/ansible/neutron-server/neutron-install.yml
+#- import_playbook: /root/okestroiaas/ansible/neutron-server/neutron-openstack-init.yml
+#- import_playbook: /root/okestroiaas/ansible/neutron-server/neutron-endpoint.yml
+#- import_playbook: /root/okestroiaas/ansible/neutron-server/neutron-config-set.yml
+#- import_playbook: /root/okestroiaas/ansible/neutron-server/neutron-haconfig-set.yml
+###
+#### neutron-gateway installation
+#- import_playbook: /root/okestroiaas/ansible/neutron-gateway/neutron-install.yml
+#- import_playbook: /root/okestroiaas/ansible/neutron-gateway/neutron-config-set.yml
+#- import_playbook: /root/okestroiaas/ansible/neutron-gateway/neutron-haconfig-set.yml
+#- import_playbook: /root/okestroiaas/ansible/neutron-gateway/neutron-dbsync.yml
+#- import_playbook: /root/okestroiaas/ansible/neutron-gateway/neutron-gateway-restart.yml
+#- import_playbook: /root/okestroiaas/ansible/neutron-gateway/neutron-server-restart.yml
+##
+##
+### neutron-compute installation 
+#- import_playbook: /root/okestroiaas/ansible/neutron-compute/nova-conf-file-edit.yml
+#- import_playbook: /root/okestroiaas/ansible/neutron-compute/nova-api-restart.yml
+#- import_playbook: /root/okestroiaas/ansible/neutron-compute/nova-compute-restart.yml
+##
+### cinder installation 
+#- import_playbook: /root/okestroiaas/ansible/cinder/cinder-database-create.yml
+#- import_playbook: /root/okestroiaas/ansible/cinder/cinder-install.yml
+#- import_playbook: /root/okestroiaas/ansible/cinder/cinder-openstack-init.yml
+#- import_playbook: /root/okestroiaas/ansible/cinder/cinder-endpoint.yml
+#- import_playbook: /root/okestroiaas/ansible/cinder/cinder-config-set.yml
+#- import_playbook: /root/okestroiaas/ansible/cinder/cinder-dbsync.yml
+#- import_playbook: /root/okestroiaas/ansible/cinder/cinder-restart.yml
+#
+
+#n octavia_api installation
+#- import_playbook: /root/okestroiaas/ansible/octavia/octavia-bash-shell.yml
+#- import_playbook: /root/okestroiaas/ansible/octavia/octavia-database-create.yml
+#- import_playbook: /root/okestroiaas/ansible/octavia/octavia-openstack-init.yml
+#- import_playbook: /root/okestroiaas/ansible/octavia/octavia-endpoint.yml
+#- import_playbook: /root/okestroiaas/ansible/octavia/octavia-install.yml
+#- import_playbook: /root/okestroiaas/ansible/octavia/octavia-cp-certs.yml
+- import_playbook: /root/okestroiaas/ansible/octavia/octavia-lb-mgmt-network-setting.yml
+#- import_playbook: /root/okestroiaas/ansible/octavia/octavia-lb-mgmt-network.yml
+#- import_playbook: /root/okestroiaas/ansible/octavia/octavia-o-hm0-network.yml
+#- import_playbook: /root/okestroiaas/ansible/octavia/octavia-dhclient.yml
+
+# octavia openstack settings
+#- import_playbook: /root/okestroiaas/ansible/octavia/octavia-config-set.yml
+#- import_playbook: /root/okestroiaas/ansible/octavia/octavia-dbsync.yml
+#- import_playbook: /root/okestroiaas/ansible/octavia/octavia-restart.yml

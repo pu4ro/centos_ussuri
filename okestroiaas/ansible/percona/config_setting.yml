@@ -1,0 +1,20 @@
+---
+- name: Percona-XtraCluster-DB install 
+  hosts: controller
+  become: true
+  vars_files:
+    - /root/okestroiaas/variable/common_vars/main.yml
+  tasks:
+  - name: Stop all instances
+    service: name=mysql state=stopped
+
+  - name: Configures for my.cnf setting
+    template:
+      src: "{{ template_files }}"
+      dest: /etc/percona-xtradb-cluster.conf.d/wsrep.cnf
+      owner: root
+      group: root
+      mode: 0644
+    with_items:
+      ['percona-xtradb-cluster.cnf.j2']
+

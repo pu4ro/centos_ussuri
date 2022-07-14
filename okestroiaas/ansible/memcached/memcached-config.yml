@@ -1,0 +1,30 @@
+---
+- name: create memcached container
+  hosts: controller
+  become: true
+  vars_files:
+    - /root/okestroiaas/variable/common_vars/main.yml
+  tasks:
+  - name: Copy configuration files
+    template:
+      src: "{{ template_files }}"
+      dest: /etc/sysconfig/memcached.conf
+      owner: root
+      group: root
+      mode: 0644
+    with_items:
+      ['memcached.conf.j2']
+    register: memcached_conf
+
+  - name: service enabled memcached
+    systemd: 
+      name: memcached.service
+      enabled: yes
+      masked: no
+
+  - name: service start 
+    systemd:
+      name: memcached.service
+      state: restarted
+    when: memcached_conf is changed
+ 

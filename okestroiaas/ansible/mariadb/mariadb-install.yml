@@ -1,0 +1,28 @@
+---
+ - name: mariadb install 
+   hosts: mariadb01 
+   become: true
+   vars_files:
+     - /home/ubuntu/cloudxpert/variable/mariadb_vars/main.yml 
+   tasks:
+   - name: mariadb install
+     apt: pkg={{ item }} state=present
+     with_items:
+     - mariadb-server
+     - python-pymysql
+     - python-mysqldb
+
+   - name: Update mysql root password for all root accounts
+     mysql_user: 
+        name: root 
+        host: "{{ item }}" 
+        password: "{{ db_password }}"
+        priv: '*.*:ALL,GRANT'
+        state: present
+     with_items:
+        - "{{ ansible_hostname }}"
+        - 127.0.0.1
+        - ::1
+        - localhost
+        - '%'
+

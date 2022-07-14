@@ -1,0 +1,16 @@
+---
+- name: Percona-XtraCluster-DB install
+  hosts: controller01
+  become: true
+  vars_files:
+    - /root/okestroiaas/variable/common_vars/main.yml
+  tasks:
+  - name: bootstrap pxc enable
+    systemd:
+      name: mysql@bootstrap
+      enabled: yes
+
+  - name: Bootstrap pxc primary
+    systemd:
+      name: mysql@bootstrap
+      state: started 

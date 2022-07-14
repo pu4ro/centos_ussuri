@@ -1,0 +1,86 @@
+  - name:  OpenStack Service_Octavia
+    hosts: controller01
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    environment:
+       OS_PROJECT_DOMAIN_NAME: Default
+       OS_USER_DOMAIN_NAME: Default
+       OS_PROJECT_NAME: service
+       OS_USERNAME: octavia
+       OS_PASSWORD: "{{ keystone_pass }}"
+       OS_AUTH_URL: http://{{ bind_ip }}:15000/v3/
+       OS_IDENTITY_API_VERSION: 3
+       OS_IMAGE_API_VERSION: 2
+       OS_VOLUME_API_VERSION: 3
+       OCTAVIA_MGMT_SUBNET: 172.24.0.0/14
+    tasks:
+    - name: debug lb-mgmt-network
+      command: openstack network list
+      register: lb_mgmt_network
+      tags: debug_lb
+
+    - name: debug contents
+      debug:
+        var: lb_mgmt_network.stdout.find('lb-mgmt-net')
+      tags: debug_lb
+
+    - name: create lb-mgmt-network	
+      shell: openstack network create lb-mgmt-net
+      when: lb_mgmt_network.stdout.find('lb-mgmt-net') == -1
+    
+    - name: lb-mgmt subnet create
+      shell: openstack subnet create --subnet-range $OCTAVIA_MGMT_SUBNET --gateway none --network lb-mgmt-net lb-mgmt-subnet
+      when: lb_mgmt_network.stdout.find('lb-mgmt-net') == -1
+     
+    - name: debug lb-mgmt-sec-grp
+      command: openstack security group list
+      register: lb_mgmt_sec_grp
+      
+    - name: create lb-mgmt-sec-grp
+      shell: openstack security group create lb-mgmt-sec-grp
+      when: lb_mgmt_sec_grp.stdout.find('lb-mgmt-sec-grp') == -1
+
+    - name: add policy lb-mgmt-sec-grp
+      shell: |
+        openstack security group rule create --protocol icmp default
+        openstack security group rule create --protocol tcp --dst-port 22 default
+        openstack security group rule create --protocol tcp --dst-port 9443 default
+        openstack security group rule create --protocol udp --dst-port 5555 default
+      when: lb_mgmt_network.stdout.find('lb-mgmt-net') == -1
+
+    - name: openstack keypair debug
+      shell: openstack keypair list
+      register: keypair
+   
+    - name: create ssh key 
+      shell: openstack keypair create --public-key ~/.ssh/id_rsa.pub octaviakey
+      when: keypair.stdout.find('octaviakey') == -1
+
+    - name: flavor debug
+      shell: openstack flavor list
+      register: flavor
+  
+    - name: amphora image uploading
+      shell: openstack image list
+      register: image
+
+    - name: openstack amphora flavor create
+      shell: openstack flavor create --id 200 --vcpus 1 --ram 1024 --disk 2 "amphora" --public
+      when: flavor.stdout.find('amphora') == -1
+    
+    - name: image copy /root directory
+      copy:
+        src: /root/okestroiaas/files/amphora-x64-haproxy.qcow2 
+        dest: /root
+      when: image.stdout.find('amphora-x64-haproxy') == -1
+
+    - name: openstack amphora image uploading
+      shell: openstack image create --disk-format qcow2 --container-format bare --public --tag amphora --file /root/amphora-x64-haproxy.qcow2 amphora-x64-haproxy
+      when: image.stdout.find('amphora-x64-haproxy') == -1
+
+    - name: delete file amphora image
+      file:
+        path: /root/amphora-x64-haproxy.qcow2
+        state: absent
+      when: image.stdout.find('amphora-x64-haproxy') == -1

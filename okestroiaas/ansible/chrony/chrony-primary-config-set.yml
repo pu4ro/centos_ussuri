@@ -1,0 +1,21 @@
+---
+  - name: NTP Service
+    hosts: "{{ ntp_main }}"
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: chrony conf file copy
+      template:
+        src: "{{ template_files }}" 
+        dest: /etc/chrony.conf
+        owner: root
+        group: root
+        mode: 0644
+      with_items:
+        ['chrony.conf.main.j2']
+
+    - name: chrony service restart
+      service:
+        name: chronyd
+        state: restarted

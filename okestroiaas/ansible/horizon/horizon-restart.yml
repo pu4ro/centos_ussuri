@@ -1,0 +1,14 @@
+---
+  - name:  OpenStack Service horizon
+    hosts: "{{ yml_06_hosts }}" 
+    become: true
+    vars_files:
+      - /home/ubuntu/cloudxpert/variable/horizon_vars/main.yml 
+    tasks:
+    - name: horizon restart  
+      service:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - apache2
+        - memcached

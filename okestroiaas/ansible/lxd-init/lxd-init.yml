@@ -1,0 +1,34 @@
+---
+  - name: lxd init setting
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+      - name: Place lxd config script
+        template:
+          src: "{{ template_files }}"
+          dest: /root/lxd-init.sh
+          owner: root 
+          group: "lxd"
+          mode: 0770
+        with_items:
+          ['lxd-init.sh.j2']
+        register: lxd_init_script
+        tags:
+          - lxd-init
+
+      - name: Configure lxd init
+        command: nohup /root/lxd-init.sh
+        when: lxd_init_script is changed
+        ignore_errors: yes
+        tags:
+          - lxd-init
+
+      - name: delete lxd init.sh
+        file:
+          state: absent
+          path: /root/lxd-init.sh 
+        tags:
+          - lxd-init
+

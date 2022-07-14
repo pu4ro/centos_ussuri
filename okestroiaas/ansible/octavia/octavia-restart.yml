@@ -1,0 +1,26 @@
+---
+  - name:  OpenStack Service_nova-api
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: octavia-service restart
+      service: 
+        name: "{{ item }}"
+        state: restarted
+      with_items: 
+        - octavia-health-manager
+        - octavia-worker
+        - octavia-api
+        - octavia-housekeeping 
+      
+    - name: octavia-service restart
+      systemd: 
+        name: "{{ item }}"
+        enabled: yes
+      with_items: 
+        - octavia-health-manager
+        - octavia-worker
+        - octavia-api
+        - octavia-housekeeping

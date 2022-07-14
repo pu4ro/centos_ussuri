@@ -1,0 +1,13 @@
+---
+  - name:  OpenStack nova service restart
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: nova-api restart
+      service:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - openstack-nova-api

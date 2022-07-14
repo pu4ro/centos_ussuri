@@ -1,0 +1,11 @@
+[DEFAULT]
+
+[agent]
+tunnel_types = vxlan
+l2_population = true
+
+[ovs]
+local_ip = {{ local_ip }}
+
+[securitygroup]
+firewall_driver = iptables_hybrid

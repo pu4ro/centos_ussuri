@@ -1,0 +1,29 @@
+#!/bin/bash
+
+{{ node }}
+{{ network }}
+
+lxc launch ubuntu/xenial "${node}"
+lxc exec ${node} -- mkdir /root/.ssh
+lxc exec ${node} -- mkdir /home/ubuntu/.ssh
+
+lxc file push /root/files/authorized_keys ${node}/root/.ssh/authorized_keys
+lxc file push /root/files/ubuntu ${node}/etc/sudoers.d/ubuntu
+lxc file push /root/files/${network} ${node}/etc/network/interfaces
+lxc file push /root/files/sources.list ${node}/etc/apt/sources.list
+lxc file push /root/files/sshd_config ${node}/etc/ssh/sshd_config
+
+lxc exec ${node} -- cp /root/.ssh/authorized_keys /home/ubuntu/.ssh/authorized_keys
+lxc exec ${node} -- chown ubuntu:ubuntu /home/ubuntu/.ssh/authorized_keys
+lxc restart ${node}
+
+lxc exec ${node} -- apt update && apt upgrade -y
+lxc exec ${node} -- apt install openssh-server -y
+lxc exec ${node} -- apt install tree -y
+lxc exec ${node} -- apt install curl -y
+lxc exec ${node} -- apt install telnet -y
+lxc exec ${node} -- apt install aptitude -y
+lxc exec ${node} -- apt install python-minimal -y
+lxc exec ${node} -- apt install --reinstall -y systemd dbus 
+lxc exec ${node} -- timedatectl set-timezone Asia/Seoul
+lxc restart ${node}

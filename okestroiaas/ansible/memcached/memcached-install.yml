@@ -1,0 +1,13 @@
+---
+ - name: create memcached container
+   hosts: controller
+   become: true
+   vars_files:
+    - /root/okestroiaas/variable/common_vars/main.yml
+   tasks:
+   - name: memcached install
+     yum:
+       update_cache: yes
+       name:
+          - memcached.x86_64
+          - python3-memcached.noarch

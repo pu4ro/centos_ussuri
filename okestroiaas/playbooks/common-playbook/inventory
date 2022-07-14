@@ -1,0 +1,64 @@
+[controller]
+controller01 ansible_host=192.168.0.71 MGMT_PORT_IP=172.24.0.11
+controller02 ansible_host=192.168.0.72 MGMT_PORT_IP=172.24.0.12 
+controller03 ansible_host=192.168.0.73 MGMT_PORT_IP=172.24.0.13
+
+[baremetal]
+controller01 ansible_host=192.168.0.71 MGMT_PORT_IP=172.24.0.11
+controller02 ansible_host=192.168.0.72 MGMT_PORT_IP=172.24.0.12
+controller03 ansible_host=192.168.0.73 MGMT_PORT_IP=172.24.0.13
+
+[haproxy:children]
+haproxy01
+haproxy02
+haproxy03
+
+[haproxy01]
+192.168.0.71
+
+[haproxy02]
+192.168.0.72
+
+[haproxy03]
+192.168.0.73
+
+
+
+##baremetal inventory#
+#[controller:children]
+#controller01 ansible_host=192.168.0.71 
+#controller02 
+#controller03 
+#[controller01]
+#192.168.0.71
+#[controller02]
+#192.168.0.72
+#[controller03]
+#192.168.0.73
+#
+#[baremetal:children]
+#controller01
+#controller02
+#controller03
+#[controller01]
+#192.168.0.71
+#[controller02]
+#192.168.0.72
+#[controller03]
+#192.168.0.73
+#
+##container inventory#
+#[haproxy:children]
+##haproxy01
+##haproxy02
+##haproxy03
+#
+#[haproxy01]
+#192.168.0.71
+#
+#[haproxy02]
+#192.168.0.72
+#
+#[haproxy03]
+#192.168.0.73
+#

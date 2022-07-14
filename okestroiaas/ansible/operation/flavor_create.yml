@@ -1,0 +1,30 @@
+---
+  - name:  OpenStack Service_radosgw
+    hosts: controller
+    become: true
+    vars_files:
+      - /home/ubuntu/ansible/radosgw/vars/main.yml
+    environment:
+       OS_PROJECT_DOMAIN_NAME: Default
+       OS_USER_DOMAIN_NAME: Default
+       OS_PROJECT_NAME: admin
+       OS_USERNAME: admin
+       OS_PASSWORD: "{{ os_password }}"
+       OS_AUTH_URL: "{{ os_auth_url }}"
+       OS_IDENTITY_API_VERSION: 3
+       OS_IMAGE_API_VERSION: 2
+    tasks:
+    - name: OpenStack  Flavor Create tiny
+      command: openstack flavor create --id 0 --vcpu 1 --ram 512 --disk 10 m1.tiny
+
+    - name: OpenStack  Flavor Create small
+      command: openstack flavor create --id 1 --vcpu 1 --ram 2048 --disk 20 m1.small
+
+    - name: OpenStack  Flavor Create medium
+      command: openstack flavor create --id 2 --vcpu 2 --ram 4096 --disk 40 m1.medium
+
+    - name: OpenStack  Flavor Create large
+      command: openstack flavor create --id 3 --vcpu 4 --ram 8192 --disk 80 m1.large
+
+    - name: OpenStack  Flavor Create xlarge
+      command: openstack flavor create --id 4 --vcpu 8 --ram 16384 --disk 160 m1.xlarge 

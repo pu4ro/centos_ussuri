@@ -1,0 +1,100 @@
+---
+- name: prolinux requirement for ansible 
+  hosts: controller
+  become: true
+  vars_files:
+    - /root/okestroiaas/variable/common_vars/main.yml
+  tasks:
+  - name: create directory backup
+    file:
+      path: /etc/yum.repos.d/backup
+      state: directory
+
+  - name: mv all repo file 
+    shell: mv "/etc/yum.repos.d"/*".repo" "/etc/yum.repos.d/backup/"
+    ignore_errors: True
+
+  - name: Copy configuration files
+    template:
+      src: "{{ template_files }}"
+      dest: /etc/yum.repos.d/local.repo
+      owner: root
+      group: root
+      mode: 0644
+    with_items:
+      ['sources.list.j2']
+
+  - name: yum clean 
+    command: yum clean all
+
+  - name: yum repolist 
+    command: yum repolist
+
+  - name: Pakage installation
+    yum:
+      update_cache: yes
+      name:
+         - curl
+         - tree
+         - net-tools
+      state: present
+
+  - name: Stop service
+    service:
+      name: "{{ item }}"
+      state: stopped
+    with_items:
+      - firewalld
+
+  - name: Disable services
+    service:
+      name: "{{ item }}"
+      enabled: no
+    with_items:
+      - firewalld
+
+  - name: Generate /etc/hosts for all of the nodes
+    template:
+      src: "{{ template_files }}"
+      dest: /etc/hosts
+      owner: root
+      group: root
+      mode: 0644
+      backup: yes
+    with_items:
+      ['hosts.j2']
+
+
+  - name: Add or modify * nofile limits for wildcard domain
+    pam_limits:
+      domain: '*'
+      limit_type: '-'
+      limit_item: nofile
+      value: '65536'
+      use_max: yes
+
+  - name: Add or modify root nofile limits for wildcard domain
+    pam_limits:
+      domain: root
+      limit_type: '-'
+      limit_item: nofile
+      value: '65536'
+      use_max: yes
+
+  - name: Generate kernal update
+    template:
+      src: "{{ template_files }}"
+      dest: /etc/sysctl.d/sysctl.conf
+      owner: root
+      group: root
+      mode: 0644
+      backup: yes
+    with_items:
+      ['sysctl.conf.j2']
+
+  - name : sysctl -p
+    command: sysctl -p
+
+  - name: Disable SELinux
+    selinux:
+      state: disabled

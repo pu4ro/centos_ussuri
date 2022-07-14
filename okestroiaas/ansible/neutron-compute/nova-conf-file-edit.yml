@@ -1,0 +1,24 @@
+---
+  - name: nova.conf file configure 
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: Use neutron
+      ini_file:
+        dest: /etc/nova/nova.conf
+        section: neutron
+        option: '{{ item.key }}'
+        value: '{{ item.value }}'
+      with_dict:
+        auth_url: 'http://{{ bind_ip }}:5000'
+        auth_type: password
+        project_domain_name: Default
+        user_domain_name: Default
+        region_name: RegionOne
+        project_name: service
+        username: neutron
+        password: "{{ keystone_pass }}"
+        service_metadata_proxy: True
+        metadata_proxy_shared_secret: "{{ keystone_pass }}"

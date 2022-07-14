@@ -1,0 +1,29 @@
+---
+  - name:  OpenStack Service_Keystone Configure
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: Configure Keystone DB access
+      ini_file:
+        dest: /etc/keystone/keystone.conf
+        section: database
+        option: connection
+        value: 'mysql+pymysql://keystone:{{ db_password }}@{{ bind_ip }}:13306/keystone'
+
+    - name: Configure Fernet token provider. 
+      ini_file:
+        dest: /etc/keystone/keystone.conf
+        section: token
+        option: provider
+        value: fernet 
+    
+    - name: create keystone symbolic link
+      file:
+        src: /usr/share/keystone/wsgi-keystone.conf
+        dest: /etc/httpd/conf.d/wsgi-keystone.conf
+        owner: root
+        group: root
+        state: link
+      

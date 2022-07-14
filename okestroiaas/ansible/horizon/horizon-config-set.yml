@@ -1,0 +1,18 @@
+---
+  - name:  OpenStack Service horizon
+    hosts: "{{ yml_05_hosts }}" 
+    become: true
+    vars_files:
+      - /home/ubuntu/cloudxpert/variable/horizon_vars/main.yml 
+    tasks:
+    - name: local_settings.py configure
+      template: 
+        src: "{{ template_files }}" 
+        dest: /etc/openstack-dashboard/local_settings.py
+        owner: root
+        group: horizon
+        mode: 0640
+        backup: yes
+      with_items:
+        ['local_settings.py.j2']
+

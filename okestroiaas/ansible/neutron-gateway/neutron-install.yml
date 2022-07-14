@@ -1,0 +1,25 @@
+---
+  - name:  OpenStack Service neutron-gateway
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: neutron_gateway_pakage_install
+      yum:
+        name:
+          - openstack-neutron-openvswitch
+          - openstack-neutron
+          - openstack-neutron-ml2
+
+        state: present
+   
+    - name: neutron service enable
+      systemd:
+        name: "{{ item }}"
+        enabled: yes
+      with_items:
+          - neutron-openvswitch-agent
+          - neutron-metadata-agent
+          - neutron-l3-agent
+          - neutron-dhcp-agent

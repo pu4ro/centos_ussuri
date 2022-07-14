@@ -1,0 +1,10 @@
+---
+  - name:  OpenStack Service_octavia-api
+    hosts: controller01
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: DB sync
+      command: octavia-db-manage --config-file /etc/octavia/octavia.conf upgrade head
+

@@ -1,0 +1,27 @@
+---
+  - name:  OpenStack Service_Keystone
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: env-script-copy 
+      template:
+        src: "{{ template_files }}"
+        dest: /root/contrabass-openrc
+        owner: root
+        group: root
+        mode: 600
+      with_items:
+        ['contrabass.rc.j2'] 
+
+    - name: service enabled httpd
+      systemd:
+        name: httpd
+        enabled: yes
+
+    - name: service restart httpd
+      systemd:
+        name: httpd.service
+        state: restarted
+

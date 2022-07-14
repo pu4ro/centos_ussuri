@@ -1,0 +1,14 @@
+---
+  - name:  OpenStack Service_neutron-gateway
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: add ovs-br
+      command: ovs-vsctl add-br br-in
+      register: ovs_brin_add
+
+    - name: ovs-br port add
+      command: ovs-vsctl add-port br-in {{ in_nic }}
+      when: ovs_brin_add is changed

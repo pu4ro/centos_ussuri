@@ -1,0 +1,36 @@
+#!/bin/bash
+
+{{ node03 }}
+
+lxc launch ubuntu/xenial "${node03}"
+sleep 10
+lxc exec ${node03} -- mkdir /root/.ssh
+lxc exec ${node03} -- mkdir /home/ubuntu/.ssh
+
+lxc file push /root/files/authorized_keys ${node03}/root/.ssh/authorized_keys
+lxc file push /root/files/ubuntu ${node03}/etc/sudoers.d/ubuntu
+lxc file push /root/files/interfaces ${node03}/etc/network/interfaces
+lxc file push /root/files/sources.list ${node03}/etc/apt/sources.list
+lxc file push /root/files/sshd_config ${node03}/etc/ssh/sshd_config
+
+lxc exec ${node03} -- cp /root/.ssh/authorized_keys /home/ubuntu/.ssh/authorized_keys
+lxc exec ${node03} -- chown ubuntu:ubuntu /home/ubuntu/.ssh/authorized_keys
+lxc restart ${node03}
+sleep 10
+lxc exec ${node03} -- apt update && apt upgrade -y
+lxc exec ${node03} -- apt install openssh-server -y
+lxc exec ${node03} -- apt install tree -y
+lxc exec ${node03} -- apt install curl -y
+lxc exec ${node03} -- apt install telnet -y
+lxc exec ${node03} -- apt install aptitude -y
+lxc exec ${node03} -- apt install python-minimal -y
+lxc exec ${node03} -- apt install --reinstall -y systemd dbus 
+lxc exec ${node03} -- timedatectl set-timezone Asia/Seoul
+lxc restart ${node03}
+sleep 10
+lxc exec ${node03} -- apt install software-properties-common -y
+lxc exec ${node03} -- add-apt-repository cloud-archive:ocata -y
+lxc exec ${node03} -- rm /etc/apt/sources.list.d/cloudarchive-ocata.list
+lxc file push /root/files/cloudarchive-ocata.list ${node03}/etc/apt/sources.list.d/cloudarchive-ocata.list
+lxc exec ${node03} -- apt update && apt dist-upgrade -y
+

@@ -1,0 +1,37 @@
+---
+  - name:  OpenStack nova compute restart 
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: libvirtd socket 
+      systemd:
+        name: "{{ item }}"
+        enabled: yes
+      with_items:
+        - libvirtd.socket
+        - libvirtd
+
+    - name: libvirtd service start
+      systemd:
+        name: "{{ item }}"
+        state: started
+      with_items:
+        - libvirtd.socket
+        - libvirtd
+
+    - name: nova-compute-service restart
+      systemd: 
+        name: "{{ item }}"
+        enabled: yes
+      with_items: 
+        - openstack-nova-compute
+
+    - name: nova-compute-service restart
+      service: 
+        name: "{{ item }}"
+        state: started
+      with_items: 
+        - openstack-nova-compute
+

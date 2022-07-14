@@ -1,0 +1,18 @@
+---
+  - name:  OpenStack Service_cinder
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: cinder config file setting 
+      template: 
+        src: "{{ template_files }}" 
+        dest: /etc/cinder/cinder.conf
+        owner: cinder
+        group: cinder
+        mode: 0644
+        backup: yes
+      with_items:
+        ['cinder.conf.j2']
+

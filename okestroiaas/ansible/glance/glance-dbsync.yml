@@ -1,0 +1,11 @@
+---
+  - name:  OpenStack Service_glance
+    hosts: controller01
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml 
+    tasks:
+    - name: DB sync
+      changed_when: no
+      command: /bin/sh -c "glance-manage db_sync" 
+      

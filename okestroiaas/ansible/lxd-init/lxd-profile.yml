@@ -1,0 +1,40 @@
+---
+  - name: lxd init setting
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml 
+    tasks:
+      - name: Place lxd profile
+        template:
+          src: "{{ template_files }}"
+          dest: /root/profile.yml
+          owner: root 
+          group: root
+          mode: 0644
+        with_items:
+          ['profile.yml.j2']
+        register: lxd_profile
+        tags:
+          - lxd-profile
+
+      - name: Configure lxd profile
+        shell: cat /root/profile.yml | lxc profile edit default
+        when: lxd_profile is changed
+        tags:
+          - lxd-profile
+
+      - name: delete lxd profile.yml
+        file:
+          state: absent
+          path: /root/profile.yml
+        tags:
+          - lxd-profile
+
+      - name: create sharefs directory
+        file:
+          path: /mnt/sharehost/
+          state: directory
+          owner: root
+          group: root
+          mode: 0755

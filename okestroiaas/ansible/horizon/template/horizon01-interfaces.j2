@@ -1,0 +1,36 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+
+{% if horizon01_eth0_address is defined %}
+auto eth0
+iface eth0 inet static
+address {{ horizon01_eth0_address }}
+{% endif %}
+
+{% if horizon01_eth1_address is defined %}
+auto eth1
+iface eth1 inet static
+address {{ horizon01_eth1_address }}
+{% endif %}
+
+{% if horizon01_eth2_address is defined %}
+auto eth2
+iface eth2 inet static
+address {{ horizon01_eth2_address }}
+{% endif %}
+
+{% if horizon01_eth3_address is defined %}
+auto eth3
+iface eth3 inet static
+address {{ horizon01_eth3_address }}
+{% endif %}
+
+{% if horizon01_eth4_address is defined %}
+auto eth4
+iface eth4 inet static
+address {{ horizon01_eth4_address }}
+{% endif %}

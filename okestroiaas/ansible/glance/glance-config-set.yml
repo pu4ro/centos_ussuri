@@ -1,0 +1,17 @@
+---
+  - name:  OpenStack Service_Keystone
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: glacne-api config file setting 
+      template: 
+        src: "{{ template_files }}" 
+        dest: /etc/glance/glance-api.conf
+        owner: glance
+        group: glance
+        mode: 0644
+        backup: yes
+      with_items:
+        ['glance-api.conf.j2']

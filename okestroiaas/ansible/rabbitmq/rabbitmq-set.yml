@@ -1,0 +1,31 @@
+---
+- name: create ceph-mon container
+  hosts: controller01
+  become: true
+  vars_files:
+    - /root/okestroiaas/variable/common_vars/main.yml
+  tasks:
+  - name: rabbitmq create user
+    rabbitmq_user:
+      user: "{{ rabbitmq_name }}"
+      password: "{{ rabbitmq_password }}"
+      vhost: /
+      configure_priv: .*
+      read_priv: .*
+      write_priv: .*
+      state: present
+    register: create_user
+
+
+  - name: rabbimq enabled
+    systemd:
+      name: rabbitmq-server.service
+      enabled: yes
+      masked: no    
+
+
+  - name: service start 
+    service:
+      name: rabbitmq-server
+      state: restarted
+    when: create_user is changed

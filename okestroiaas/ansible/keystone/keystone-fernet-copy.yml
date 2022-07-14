@@ -1,0 +1,35 @@
+---
+  - name:  OpenStack Service_Keystone
+    hosts: controller02,controller03
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: create credential-keys dir
+      file:
+        path: /etc/keystone/credential-keys
+        state: directory
+        owner: keystone
+        group: keystone
+        mode: '0700'
+
+    - name: create fernet_keys dir
+      file:
+        path: /etc/keystone/fernet-keys
+        state: directory
+        owner: keystone
+        group: keystone
+        mode: '0700'
+
+    - name: Fernetkey-copy
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+        mode: "{{ item.mode }}"
+      with_items:
+        - { src: '/root/okestroiaas/files/fernet-keys/0_f',dest: '/etc/keystone/fernet-keys/0',owner: 'keystone',group: 'keystone',mode: '0600' }
+        - { src: '/root/okestroiaas/files/fernet-keys/1_f',dest: '/etc/keystone/fernet-keys/1',owner: 'keystone',group: 'keystone',mode: '0600' }
+        - { src: '/root/okestroiaas/files/credential-keys/0_c',dest: '/etc/keystone/credential-keys/0',owner: 'keystone',group: 'keystone',mode: '0600' }
+        - { src: '/root/okestroiaas/files/credential-keys/1_c',dest: '/etc/keystone/credential-keys/1',owner: 'keystone',group: 'keystone',mode: '0600' }

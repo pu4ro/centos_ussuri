@@ -1,0 +1,14 @@
+---
+  - name:  OpenStack Service_Keystone
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: keystone_pakage_install  
+      yum:
+        name: 
+          - openstack-keystone
+          - python3-mod_wsgi
+          - httpd
+

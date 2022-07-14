@@ -1,0 +1,8 @@
+network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: true
+      dhcp-identifier: mac
+    eth3:
+      addresses: [{{ memcached02_ip }}/24]

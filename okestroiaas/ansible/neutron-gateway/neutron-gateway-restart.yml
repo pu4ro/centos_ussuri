@@ -1,0 +1,16 @@
+---
+  - name:  OpenStack neutron service restart
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: neutron-gateway-service restart
+      service:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - neutron-openvswitch-agent
+        - neutron-dhcp-agent
+        - neutron-metadata-agent
+        - neutron-l3-agent

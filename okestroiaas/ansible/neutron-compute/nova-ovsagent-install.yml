@@ -1,0 +1,13 @@
+---
+  - name:  OpenStack pakage install
+    hosts: compute
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: neutron ovsagent install
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - openstack-neutron-openvswitch

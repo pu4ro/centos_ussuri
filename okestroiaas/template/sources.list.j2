@@ -1,0 +1,92 @@
+[AppStream]
+name=AppStream
+baseurl=http://{{ package_ip }}/repo/AppStream
+gpgcheck=0
+enabled=1
+
+[BaseOS]
+name=BaseOS
+baseurl=http://{{ package_ip }}/repo/BaseOS
+gpgcheck=0
+enabled=1
+
+[centos-openstack-ussuri]
+name=centos-openstack-ussuri
+baseurl=http://{{ package_ip }}/repo/centos-openstack-ussuri
+gpgcheck=0
+enabled=1
+
+[ceph_stable]
+name=ceph_stable
+baseurl=http://{{ package_ip }}/repo/ceph_stable
+gpgkey = http://{{ package_ip }}/repo/ceph_stable/release.asc
+gpgcheck=1
+enabled=1
+
+[ceph_stable_noarch]
+name=ceph_stable_noarch
+baseurl=http://{{ package_ip }}/repo/ceph_stable_noarch
+gpgkey = http://{{ package_ip }}/repo/ceph_stable/release.asc
+gpgcheck=1
+enabled=1
+
+[epel]
+name=epel
+baseurl=http://{{ package_ip }}/repo/epel
+gpgcheck=0
+enabled=1
+
+[epel-modular]
+name=epel-modular
+baseurl=http://{{ package_ip }}/repo/epel-modular
+gpgcheck=0
+enabled=1
+
+[extras]
+name=extras
+baseurl=http://{{ package_ip }}/repo/extras
+gpgcheck=0
+enabled=1
+
+[high]
+name=high
+baseurl=http://{{ package_ip }}/repo/high
+gpgcheck=0
+enabled=1
+
+[percona-release-noarch]
+name=percona-release-noarch
+baseurl=http://{{ package_ip }}/repo/percona-release-noarch
+gpgcheck=0
+enabled=1
+
+[percona-release-x86_64]
+name=percona-release-x86_64
+baseurl=http://{{ package_ip }}/repo/percona-release-x86_64
+gpgcheck=0
+enabled=1
+
+[powertool]
+name=powertool
+baseurl=http://{{ package_ip }}/repo/powertool
+gpgcheck=0
+enabled=1
+
+[prel-release-noarch]
+name=prel-release-noarch
+baseurl=http://{{ package_ip }}/repo/prel-release-noarch
+gpgcheck=0
+enabled=1
+
+[rabbit]
+name=rabbit
+baseurl=http://{{ package_ip }}/repo/rabbit
+gpgcheck=0
+enabled=1
+
+[AppStream2]
+name=AppStream2
+baseurl=http://192.168.0.62/repo/AppStream_back2
+gpgcheck=0
+enabled=1
+

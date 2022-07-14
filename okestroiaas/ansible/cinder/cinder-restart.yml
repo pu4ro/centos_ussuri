@@ -1,0 +1,24 @@
+---
+  - name:  OpenStack Service_cinder
+    hosts: controller
+    become: true
+    vars_files:
+      - - /root/okestroiaas/variable/common_vars/main.yml 
+    tasks:
+    - name: cinder-service enabled
+      systemd:
+        name: "{{ item }}"
+        enabled: yes
+      with_items:
+        - openstack-cinder-api
+        - openstack-cinder-scheduler
+        - openstack-cinder-volume
+
+    - name: cinder-service restart
+      service:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - openstack-cinder-api
+        - openstack-cinder-scheduler
+        - openstack-cinder-volume

@@ -1,0 +1,14 @@
+---
+  - name: lxd init setting
+    hosts: controller02
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+      - name: Create a started container
+        lxd_container:
+          name: test01
+          state: started
+          source:
+            type: image
+            fingerprint: 2b8e6e29c78c

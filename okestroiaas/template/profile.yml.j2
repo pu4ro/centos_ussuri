@@ -1,0 +1,46 @@
+config:
+  security.privileged: "true" 
+  raw.apparmor: "mount fstype=nfs,"
+description: Default LXD profile
+devices:
+  eth0:
+    name: eth0
+    network: lxdbr0
+    type: nic
+{% if eth1_nic is defined %}
+  eth1:
+    name: eth1
+    nictype: bridged
+    parent: {{ eth1_nic }}
+    type: nic
+{% endif %}
+{% if eth2_nic is defined %}
+  eth2:
+    name: eth2
+    nictype: bridged
+    parent: {{ eth2_nic }}
+    type: nic
+{% endif %}
+{% if eth3_nic is defined %}
+  eth3:
+    name: eth3
+    nictype: bridged
+    parent: {{ eth3_nic }}
+    type: nic
+{% endif %}
+{% if eth4_nic is defined %}
+  eth4:
+    name: eth4
+    nictype: bridged
+    parent: {{ eth4_nic }}
+    type: nic
+{% endif %}
+  root:
+    path: /
+    pool: default
+    type: disk
+  sharedir:
+    path: /mnt/sharedir
+    source: /mnt/sharehost
+    type: disk
+name: default

@@ -1,0 +1,13 @@
+---
+  - name:  OpenStack Service_Keystone
+    hosts: "{{ yml_04_hosts }}" 
+    become: true
+    vars_files:
+      - /home/ubuntu/cloudxpert/variable/horizon_vars/main.yml 
+    tasks:
+    - name: horizon_pakage_install  
+      apt:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - openstack-dashboard

@@ -1,0 +1,32 @@
+[DEFAULT]
+rootwrap_config = /etc/cinder/rootwrap.conf
+api_paste_confg = /etc/cinder/api-paste.ini
+iscsi_helper = tgtadm
+volume_name_template = volume-%s
+volume_group = cinder-volumes
+auth_strategy = keystone
+state_path = /var/lib/cinder
+lock_path = /var/lock/cinder
+volumes_dir = /var/lib/cinder/volumes
+transport_url = rabbit://openstack:{{ rabbitmq_password }}@{{ rabbitmq01_ip }},openstack:{{ rabbitmq_password }}@{{ rabbitmq02_ip }},openstack:{{ rabbitmq_password }}@{{ rabbitmq03_ip }}
+my_ip = {{ inventory_hostname }}
+glance_api_servers = http://{{ bind_ip }}:19292
+
+[database]
+connection = mysql+pymysql://cinder:{{ db_password }}@{{ bind_ip }}:13306/cinder
+
+[oslo_messaging_rabbit]
+
+[keystone_authtoken]
+www_authenticate_uri = http://{{ bind_ip }}:15000/
+auth_url = http://{{ bind_ip }}:15000/
+memcached_servers = {{ memcached01_ip }}:11211,{{ memcached02_ip }}:11211,{{ memcached03_ip }}:11211
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+project_name = service
+username = cinder
+password = {{ keystone_pass }}
+
+[oslo_concurrency]
+lock_path = /var/lib/cinder/tmp

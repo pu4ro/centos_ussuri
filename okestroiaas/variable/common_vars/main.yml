@@ -1,0 +1,84 @@
+# Baremetal init
+
+## Local repository ##
+package_ip: 192.168.0.62
+
+#Copy file && Copy template path
+copy_files: /root/okestroiaas/files/{{item}}
+template_files: /root/okestroiaas/template/{{item}}
+interface: ens33
+
+# Baremetal hosts IP
+api_interface: ansible_brs2
+
+# lxd init setting vars
+lxd_storage_backend: dir
+#lxd_storage_pool: lxd_pool
+lxd_trust_password: cloud1234
+lxd_bind_address: 0.0.0.0
+lxd_bind_port: 8443
+
+# lxd profile_default vars
+eth1_nic: brs2
+fingerprint: bb02225744fc
+
+# NTP Setting
+ntp_main: controller01
+ntp_other: controller02,controller03
+ntp_main_server: contrabass01
+ntp_server: 203.248.240.140
+
+# percona_db env
+controller01_ip: 192.168.0.71
+controller02_ip: 192.168.0.72
+controller03_ip: 192.168.0.73
+
+
+# rabbitmq setting
+rabbitmq_name: openstack
+rabbitmq_password: cloud1234
+rabbitmq01_ip: 192.168.0.71
+rabbitmq02_ip: 192.168.0.72
+rabbitmq03_ip: 192.168.0.73
+rabbitmq_main_host: node1
+
+# memcached setting
+memcached01_ip: 192.168.0.71
+memcached02_ip: 192.168.0.72
+memcached03_ip: 192.168.0.73
+
+# percona setting
+db_password: cloud1234
+
+# haproxy setting
+bind_ip: 192.168.0.70
+bind_nic: ens33
+member: node1 node2 node3
+#haproxy01_ip: 192.168.0.66
+#haproxy02_ip: 192.168.0.67
+#haproxy03_ip: 192.168.0.68
+#controller01_ip: 192.168.0.63
+#controller02_ip: 192.168.0.64
+#controller03_ip: 192.168.0.65
+
+# keystone
+keystone_pass: cloud1234
+
+# nova_api
+vnc_host: 192.168.0.61
+
+# neutron_api
+flat_networks: "*"
+local_ip: "{{ inventory_hostname }}"
+bridge_mappings: "physnet1:br-ex"
+
+# neutron_gateway
+ex_nic: ens160
+br_name: br-ex
+
+# octavia
+#amp_owner_id: dce2be6988d945a7b9f9d92954269baf
+#amp_secgroup_id: ac05bd88-2ab3-4001-a017-ff098b63d28d
+#amp_boot_network_id: e222eab9-2e01-4adc-972a-6550cebbcbf6
+#octavia_bind_ip: 172.16.0.2
+

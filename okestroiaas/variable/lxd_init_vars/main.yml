@@ -1,0 +1,4 @@
+
+# lxd image ubuntu import
+image_create: lxc image import meta-bb02225744fca6428759f1c522a3f8c9ad119aba658af94302a15c4cbe4bc914.tar.xz bb02225744fca6428759f1c522a3f8c9ad119aba658af94302a15c4cbe4bc914.squashfs  --alias ubuntu/focal
+

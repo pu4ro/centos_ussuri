@@ -1,0 +1,23 @@
+---
+  - name:  OpenStack Service_cinder
+    hosts: controller01
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: Create cinder DB
+      mysql_db:
+        name: cinder
+        state: present
+
+    - name: Update mysql cinder password for all cinder accounts
+      no_log: true
+      mysql_user:
+         name: cinder
+         host: "{{ item }}"
+         password: "{{ db_password }}"
+         priv: cinder.*:ALL,GRANT
+         state: present
+      with_items:
+         - localhost
+         - '%'

@@ -1,0 +1,41 @@
+---
+  - name:  OpenStack Service_octavia_api
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    environment:
+       OS_PROJECT_DOMAIN_NAME: Default
+       OS_USER_DOMAIN_NAME: Default
+       OS_PROJECT_NAME: service
+       OS_USERNAME: octavia
+       OS_PASSWORD: "{{ keystone_pass }}"
+       OS_AUTH_URL: http://{{ bind_ip }}:15000/v3/
+       OS_IDENTITY_API_VERSION: 3
+       OS_IMAGE_API_VERSION: 2
+       OS_VOLUME_API_VERSION: 3
+
+    tasks:
+    - name: set amp_owner_id
+      command: openstack network show lb-mgmt-net -f value -c id
+      register: amp_owner_id
+
+    - name: set amp_secgroup_id
+      command: openstack security group show lb-mgmt-sec-grp -f value -c id
+      register: amp_secgroup_id
+    
+    - name: set amp_boot_network_id
+      command: openstack network show lb-mgmt-net -f value -c id
+      register: amp_boot_network_id
+
+    - name: octavia-api config file setting 
+      template: 
+        src: "{{ template_files }}" 
+        dest: /etc/octavia/octavia.conf
+        owner: root
+        group: octavia
+        mode: 0640
+        backup: yes
+      with_items:
+        ['octavia.conf.j2']
+

@@ -1,0 +1,25 @@
+---
+  - name: lxd image import
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/lxd_init_vars/main.yml 
+    tasks:
+    - name:  Synchronize two directories on one remote host.
+      copy:
+        src: /root/okestroiaas/files/lxd-images
+        dest: /root/
+        owner: root
+        group: root
+
+    - name: Configure lxd image
+      command: "{{ image_create }}" 
+      args:
+        chdir: /root/lxd-images
+
+    - name: remove files and directories
+      file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+      - /root/lxd-images

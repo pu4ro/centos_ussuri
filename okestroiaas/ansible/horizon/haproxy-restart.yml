@@ -1,0 +1,13 @@
+---
+- name: haproxy config setting
+  hosts: haproxy
+  become: true
+  vars_files:
+    - /root/okestroiaas/variable/common_vars/main.yml
+  tasks:
+  - name: restart haproxy
+    systemd:
+      name: haproxy
+      state: restarted
+      enabled: yes
+

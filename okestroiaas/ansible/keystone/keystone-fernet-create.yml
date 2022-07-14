@@ -1,0 +1,23 @@
+---
+  - name:  OpenStack Service_Keystone
+    hosts: controller01
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: Initialize Fernet key repositories 
+      shell: keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone 
+
+    - name: Initialize Fernet key repositories
+      shell: keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
+
+    - name: keystone FernetKeys pulling files
+      fetch: 
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        flat: true
+      with_items:
+        - { src: /etc/keystone/fernet-keys/0,dest: /root/okestroiaas/files/fernet-keys/0_f }
+        - { src: /etc/keystone/fernet-keys/1,dest: /root/okestroiaas/files/fernet-keys/1_f }
+        - { src: /etc/keystone/credential-keys/0,dest: /root/okestroiaas/files/credential-keys/0_c }
+        - { src: /etc/keystone/credential-keys/1,dest: /root/okestroiaas/files/credential-keys/1_c }

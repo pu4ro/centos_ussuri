@@ -1,0 +1,17 @@
+---
+  - name:  OpenStack Service haconfig set
+    hosts: compute 
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: nova-ovsagent ha config file setting 
+      ini_file:
+        dest: /etc/neutron/neutron.conf
+        section: oslo_messaging_rabbit
+        option: '{{ item.key }}'
+        value: '{{ item.value }}'
+      with_dict:
+        rabbit_durable_queues: true
+        rabbit_ha_queues: true
+

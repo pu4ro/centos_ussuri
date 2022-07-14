@@ -1,0 +1,12 @@
+---
+  - name:  OpenStack Service compute
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: nova-compute_pakage_install  
+      yum:
+        name:
+          - openstack-nova-compute
+        state: present

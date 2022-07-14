@@ -1,0 +1,10 @@
+network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: true
+      dhcp-identifier: mac
+    eth1:
+      addresses: [{{ ceph_radosgw01_ip }}/24]
+    eth3:
+      addresses: [{{ radosgw01_ip }}/24]

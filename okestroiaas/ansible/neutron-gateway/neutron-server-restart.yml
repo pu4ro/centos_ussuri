@@ -1,0 +1,19 @@
+---
+  - name:  OpenStack neutron service restart
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: neutron symbloic link added
+      file:
+        src: /etc/neutron/plugins/ml2/ml2_conf.ini
+        dest: /etc/neutron/plugin.ini
+        state: link
+
+    - name: neutron-server-service restart
+      service:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - neutron-server

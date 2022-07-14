@@ -1,0 +1,21 @@
+---
+ - name: NTP Service
+   hosts: baremetal
+   become: true
+   vars_files:
+     - /root/okestroiaas/variable/common_vars/main.yml
+   tasks:
+
+   - name: chrony install
+     yum:
+       update_cache: yes
+       name:
+          - chrony
+       state: present
+
+   - name: chrony enable
+     systemd:
+       name: chronyd
+       enabled: yes
+       masked: no
+     

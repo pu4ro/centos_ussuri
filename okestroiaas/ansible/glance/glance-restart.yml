@@ -1,0 +1,18 @@
+---
+  - name:  OpenStack Service_glance
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: glance-api enabled
+      systemd:
+        name: openstack-glance-api
+        enabled: yes
+
+    - name: glance-api restart
+      service:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - openstack-glance-api

@@ -1,0 +1,152 @@
+ global
+  chroot  /var/lib/haproxy
+  daemon
+  group  haproxy
+  maxconn  20000
+  pidfile  /var/run/haproxy.pid
+  user  haproxy
+
+defaults
+  log  global
+  maxconn  20000
+  option  redispatch
+  retries  3
+  timeout  http-request 3600s
+  timeout  queue 1m
+  timeout  connect 3600s
+  timeout  client 1m
+  timeout  server 1m
+  timeout  check 3600s
+
+ listen glance_api_cluster
+  bind {{ bind_ip }}:19292
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  server contrabass01 {{ controller01_ip }}:9292 check inter 2000 rise 2 fall 5
+{% if controller02_ip is defined %} 
+  server contrabass02 {{ controller02_ip }}:9292 check inter 2000 rise 2 fall 5
+{% endif %}
+{% if controller03_ip is defined %}
+  server contrabass03 {{ controller03_ip }}:9292 check inter 2000 rise 2 fall 5
+{% endif %}
+
+ listen keystone_public_internal_cluster
+  bind {{ bind_ip }}:15000
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  server contrabass01 {{ controller01_ip }}:5000 check inter 2000 rise 2 fall 5
+{% if controller02_ip is defined %}
+  server contrabass02 {{ controller02_ip }}:5000 check inter 2000 rise 2 fall 5
+{% endif %}
+{% if controller03_ip is defined %}
+  server contrabass03 {{ controller03_ip }}:5000 check inter 2000 rise 2 fall 5
+{% endif %}
+
+ listen placement_cluster
+  bind {{ bind_ip }}:18778
+  balance  source
+  option  tcpka
+  option  tcplog
+  server contrabass01 {{ controller01_ip }}:8778 check inter 2000 rise 2 fall 5
+{% if controller02_ip is defined %}
+  server contrabass02 {{ controller02_ip }}:8778 check inter 2000 rise 2 fall 5
+{% endif %}
+{% if controller03_ip is defined %}
+  server contrabass03 {{ controller03_ip }}:8778 check inter 2000 rise 2 fall 5
+{% endif %}
+
+ listen nova_cluster
+  bind {{ bind_ip }}:18774
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  server contrabass01 {{ controller01_ip }}:8774 check inter 2000 rise 2 fall 5
+{% if controller02_ip is defined %}
+  server contrabass02 {{ controller02_ip }}:8774 check inter 2000 rise 2 fall 5
+{% endif %}
+{% if controller03_ip is defined %}
+  server contrabass03 {{ controller03_ip }}:8774 check inter 2000 rise 2 fall 5
+{% endif %}
+
+ listen nova_metadata_cluster
+  bind {{ bind_ip }}:18775
+  balance  source
+  option  tcpka
+  option  tcplog
+  server contrabass01 {{ controller01_ip }}:8775 check inter 2000 rise 2 fall 5
+{% if controller02_ip is defined %}
+  server contrabass02 {{ controller02_ip }}:8775 check inter 2000 rise 2 fall 5
+{% endif %}
+{% if controller03_ip is defined %}
+  server contrabass03 {{ controller03_ip }}:8775 check inter 2000 rise 2 fall 5
+{% endif %}
+
+ listen nova_vncproxy_cluster
+  bind {{ bind_ip }}:16080
+  balance  source
+  option  tcpka
+  option  tcplog
+  server contrabass01 {{ controller01_ip }}:6080 check inter 2000 rise 2 fall 5
+{% if controller02_ip is defined %}
+  server contrabass02 {{ controller02_ip }}:6080 check inter 2000 rise 2 fall 5
+{% endif %}
+{% if controller03_ip is defined %}
+  server contrabass03 {{ controller03_ip }}:6080 check inter 2000 rise 2 fall 5
+{% endif %}
+
+listen neutron_api_cluster
+  bind {{ bind_ip }}:19696
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  server contrabass01 {{ controller01_ip }}:9696 check inter 2000 rise 2 fall 5
+{% if controller02_ip is defined %}
+  server contrabass02 {{ controller02_ip }}:9696 check inter 2000 rise 2 fall 5
+{% endif %}
+{% if controller03_ip is defined %}
+  server contrabass03 {{ controller03_ip }}:9696 check inter 2000 rise 2 fall 5
+{% endif %}
+
+ listen cinder_api_cluster
+  bind {{ bind_ip }}:18776
+  balance  source
+  option  tcpka
+  option  httpchk
+  option  tcplog
+  server contrabass01 {{ controller01_ip }}:8776 check inter 2000 rise 2 fall 5
+{% if controller02_ip is defined %}
+  server contrabass02 {{ controller02_ip }}:8776 check inter 2000 rise 2 fall 5
+{% endif %}
+{% if controller03_ip is defined %}
+  server contrabass03 {{ controller03_ip }}:8776 check inter 2000 rise 2 fall 5
+{% endif %}  
+
+ listen percona_cluster
+  bind {{ bind_ip }}:13306
+  mode tcp
+  server contrabass01 {{ controller01_ip }}:3306 check inter 2000 rise 2 fall 5
+{% if controller02_ip is defined %}
+  server contrabass02 {{ controller02_ip }}:3306 check inter 2000 rise 2 fall 5 backup
+{% endif %}
+{% if controller03_ip is defined %}
+  server contrabass03 {{ controller03_ip }}:3306 check inter 2000 rise 2 fall 5 backup
+{% endif %}
+
+ listen octavia_cluster
+  bind {{ bind_ip }}:19876
+  mode tcp
+  server contrabass01 {{ controller01_ip }}:9876 check inter 2000 rise 2 fall 5
+{% if controller02_ip is defined %}
+  server contrabass02 {{ controller02_ip }}:9876 check inter 2000 rise 2 fall 5 
+{% endif %}
+{% if controller03_ip is defined %}
+  server contrabass03 {{ controller03_ip }}:9876 check inter 2000 rise 2 fall 5 
+{% endif %}
+
+

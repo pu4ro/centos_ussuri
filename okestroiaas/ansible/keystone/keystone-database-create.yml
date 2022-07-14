@@ -1,0 +1,23 @@
+---
+  - name:  OpenStack Service_Keystone
+    hosts: controller01
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml 
+    tasks:
+    - name: Create keystone DB
+      mysql_db:
+        name: keystone
+        state: present
+
+    - name: Update mysql keystone password for all keystone accounts
+      no_log: true
+      mysql_user:
+         name: keystone
+         host: "{{ item }}"
+         password: "{{ db_password }}"
+         priv: keystone.*:ALL,GRANT
+         state: present
+      with_items:
+         - localhost
+         - '%'

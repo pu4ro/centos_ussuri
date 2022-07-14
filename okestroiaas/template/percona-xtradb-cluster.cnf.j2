@@ -1,0 +1,13 @@
+[mysqld]
+wsrep_provider=/usr/lib64/galera3/libgalera_smm.so
+wsrep_cluster_name=pxc-cluster
+wsrep_cluster_address=gcomm://{{ controller01_ip }},{{ controller02_ip }},{{ controller03_ip }}
+wsrep_node_name={{ ansible_hostname }}
+binlog_format=ROW
+default_storage_engine=InnoDB
+wsrep_node_address={{ inventory_hostname }}
+wsrep_sst_method=xtrabackup-v2
+pxc_strict_mode=ENFORCING
+default_storage_engine=InnoDB
+wsrep_sst_auth="sstuser:s3cretPass"
+max_connections=65536

@@ -1,0 +1,29 @@
+---
+  - name:  OpenStack Service_Keystone
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: neutron-server config file setting 
+      template: 
+        src: "{{ template_files }}" 
+        dest: /etc/neutron/neutron.conf
+        owner: root
+        group: neutron
+        mode: 0640
+        backup: yes
+      with_items:
+        ['neutron.conf.j2']
+
+    - name: neutron-server config file setting
+      template:
+        src: "{{ template_files }}"
+        dest: /etc/neutron/plugins/ml2/ml2_conf.ini
+        owner: root
+        group: neutron
+        mode: 0644
+        backup: yes
+      with_items:
+        ['ml2_conf.ini.j2']
+

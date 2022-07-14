@@ -1,0 +1,52 @@
+---
+- name: Rbbitmq_cluster 
+  hosts: controller02,controller03
+  become: true
+  vars_files:
+    - /root/okestroiaas/variable/common_vars/main.yml
+  tasks:
+  - name: debug inventory hostname
+    debug:
+      var: inventory_hostname
+    tags: rabbitmq
+    
+  - name: copy cookie file 
+    copy:
+      src: "{{ copy_files }}"
+      dest: /var/lib/rabbitmq/.erlang.cookie
+      owner: rabbitmq
+      group: rabbitmq
+      mode: 0400
+    with_items:
+      ['erlang.cookie']
+    tags: rabbitmq
+
+  - name: service restart 
+    service:
+      name: rabbitmq-server
+      state: restarted
+    tags: rabbitmq
+
+  - name: stop_app
+    command: rabbitmqctl stop_app
+    tags: rabbitmq
+
+  - name: add_cluster
+    command:
+      rabbitmqctl join_cluster --ram rabbit@{{ rabbitmq_main_host }}
+    register: add_cluster
+    tags: rabbitmq
+
+  - name: debug add_cluster
+    debug:
+      var: add_cluster
+    tags: rabbimq
+    when: add_cluster is changed
+
+
+  - name: start_app
+    command: rabbitmqctl start_app
+    tags: rabbitmq
+    when: add_cluster is changed
+
+

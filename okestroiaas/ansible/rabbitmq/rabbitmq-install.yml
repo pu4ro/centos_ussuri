@@ -1,0 +1,22 @@
+---
+- name: Install rabbitmq-server
+  hosts: controller
+  become: true
+  vars_files:
+    - /root/okestroiaas/variable/common_vars/main.yml
+  tasks:
+   - name: rabbitmq install
+     yum:
+       update_cache: yes
+       name:
+          - rabbitmq-server
+   - name: service start
+     systemd:
+       name: rabbitmq-server.service
+       state: started
+     
+   - name: enable service rabbitmq
+     systemd:
+       name: rabbitmq-server.service
+       enabled: yes
+       masked: no

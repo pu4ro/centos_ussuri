@@ -1,0 +1,29 @@
+---
+  - name:  OpenStack Service_octavia-api
+    hosts: controller01
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: Create DB
+      mysql_db:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - octavia
+
+    - name: Update mysql octavia-api password for all octavia-api accounts
+      no_log: true
+      mysql_user:
+         name: octavia
+         host: "{{ item.host }}"
+         password: "{{ db_password }}"
+         priv: '{{ item.db }}.*:ALL'
+         state: present
+         append_privs: yes
+      with_items:
+         - db: octavia
+           host: localhost
+         - db: octavia
+           host: '%'
+

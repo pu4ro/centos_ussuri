@@ -1,0 +1,29 @@
+---
+  - name:  OpenStack Service_nova_api
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: nova-api config file setting 
+      template: 
+        src: "{{ template_files }}" 
+        dest: /etc/nova/nova.conf
+        owner: root
+        group: nova
+        mode: 0640
+        backup: yes
+      with_items:
+        ['nova.conf.j2']
+
+    - name: placement config file setting
+      template:
+        src: "{{ template_files }}"
+        dest: /etc/placement/placement.conf
+        owner: root
+        group: placement
+        mode: 0640
+        backup: yes
+      with_items:
+        ['placement.conf.j2']
+

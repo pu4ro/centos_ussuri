@@ -1,0 +1,14 @@
+---
+- name: Rbbitmq_cluster 
+  hosts: controller01
+  become: true
+  vars_files:
+    - /root/okestroiaas/variable/common_vars/main.yml
+  tasks:
+  - name: ensure the default vhost contains the HA policy via a dict
+    rabbitmq_policy:
+      name: HA
+      pattern: .*
+    args:
+      tags:
+        ha-mode: all

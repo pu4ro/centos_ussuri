@@ -1,0 +1,29 @@
+  - name:  OpenStack Service_Octavia
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    environment:
+       OS_PROJECT_DOMAIN_NAME: Default
+       OS_USER_DOMAIN_NAME: Default
+       OS_PROJECT_NAME: service
+       OS_USERNAME: octavia
+       OS_PASSWORD: "{{ keystone_pass }}"
+       OS_AUTH_URL: http://{{ bind_ip }}:15000/v3/
+       OS_IDENTITY_API_VERSION: 3
+       OS_IMAGE_API_VERSION: 2
+       OS_VOLUME_API_VERSION: 3
+       OCTAVIA_MGMT_SUBNET: 172.24.0.0/14
+    tasks:
+    - name: create lb-mgmt-network	
+      shell: |
+        export SUBNET_ID=$(openstack subnet show lb-mgmt-subnet -f value -c id)   
+        export MGMT_PORT_ID=$(openstack port create --security-group \
+        lb-mgmt-sec-grp --device-owner Octavia:health-mgr \
+        --host={{ ansible_hostname }} -c id -f value --network lb-mgmt-net \
+        --fixed-ip subnet=$SUBNET_ID,ip-address={{ MGMT_PORT_IP }} \
+        octavia-health-manager-listen-port)
+        export MGMT_PORT_MAC=$(openstack port show -c mac_address -f value $MGMT_PORT_ID)
+        ovs-vsctl -- --may-exist add-port br-int o-hm0 -- set Interface o-hm0 type=internal -- set Interface o-hm0 external-ids:iface-status=active -- set Interface o-hm0 external-ids:attached-mac=$MGMT_PORT_MAC -- set Interface o-hm0 external-ids:iface-id=$MGMT_PORT_ID
+        ip link set dev o-hm0 address $MGMT_PORT_MAC
+        ip link set dev o-hm0 up

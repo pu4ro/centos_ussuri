@@ -1,0 +1,7 @@
+# flavor create value
+
+
+
+#environment option
+os_password: crossent1234
+os_auth_url: http://192.168.20.77:35357/v3/

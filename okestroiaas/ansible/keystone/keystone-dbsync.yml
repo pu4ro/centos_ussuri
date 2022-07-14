@@ -1,0 +1,10 @@
+---
+  - name:  OpenStack Service_Keystone
+    hosts: controller01
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: DB sync
+      changed_when: no
+      shell:  /bin/sh -c "keystone-manage db_sync" 

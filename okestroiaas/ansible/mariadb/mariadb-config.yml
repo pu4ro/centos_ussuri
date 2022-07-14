@@ -1,0 +1,23 @@
+---
+- name: create ceph-mon container
+  hosts: mariadb01
+  become: true
+  vars_files:
+    - /home/ubuntu/cloudxpert/variable/mariadb_vars/main.yml 
+  tasks:
+  - name: Copy configuration files
+    template:
+      src: "{{ template_files }}"
+      dest: /etc/mysql/mariadb.conf.d/99-openstack.cnf
+      owner: root
+      group: root
+      mode: 0644
+    with_items:
+      ['99-openstack.cnf.j2']
+    register: 99-openstack.cnf
+
+  - name: service start 
+    service:
+      name: mysql
+      state: restarted
+

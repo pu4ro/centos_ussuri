@@ -1,0 +1,14 @@
+  - name: Network Interface create
+    hosts: controller
+    tasks:
+    - name: create directory network
+      file:
+        path: /etc/systemd/network
+        state: directory
+        mode: '0755'
+
+    - name: create o-hm0 network file
+      copy:
+        content: "[Match]\nName=o-hm0\n\n[Network]\nDHCP=yes"
+        dest: /etc/systemd/network/o-hm0.network	
+        

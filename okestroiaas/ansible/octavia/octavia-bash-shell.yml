@@ -1,0 +1,17 @@
+---
+  - name:  OpenStack Service_octavia
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: env-script-copy
+      template:
+        src: "{{ template_files }}"
+        dest: /root/octavia-openrc
+        owner: root
+        group: root
+        mode: 600
+      with_items:
+        ['octavia.rc.j2']
+

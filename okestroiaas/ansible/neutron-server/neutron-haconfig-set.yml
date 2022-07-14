@@ -1,0 +1,15 @@
+---
+  - name:  OpenStack Service_neutron
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml 
+    tasks:
+    - name: nova-api ha config file setting
+      ini_file:
+        dest: /etc/neutron/neutron.conf
+        section: DEFAULT 
+        option: '{{ item.key }}'
+        value: '{{ item.value }}'
+      with_dict:
+        l3_ha: True

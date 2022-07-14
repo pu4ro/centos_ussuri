@@ -1,0 +1,31 @@
+---
+  - name:  octavia install
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: create certs dir
+      file:
+        path: /etc/octavia/certs
+        state: directory
+        owner: octavia
+        group: octavia
+        mode: 0755
+
+    - name: octavia certs copy
+      copy:
+        src: /root/okestroiaas/certs/{{ item }}
+        dest: /etc/octavia/certs/{{ item }}
+        owner: octavia
+        group: octavia 
+        mode: 0644
+      with_items:
+        - client_ca.cert.pem
+        - client.cert-and-key.pem
+        - server_ca.cert.pem
+        - server_ca-chain.cert.pem
+        - server_ca.key.pem
+
+
+

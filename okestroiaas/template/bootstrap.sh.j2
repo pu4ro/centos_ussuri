@@ -1,0 +1,6 @@
+#!/bin/bash
+ keystone-manage bootstrap --bootstrap-password {{ keystone_pass }} \
+  --bootstrap-admin-url http://{{ bind_ip }}:15000/v3/ \
+  --bootstrap-internal-url http://{{ bind_ip }}:15000/v3/ \
+  --bootstrap-public-url http://{{ bind_ip }}:15000/v3/ \
+  --bootstrap-region-id RegionOne

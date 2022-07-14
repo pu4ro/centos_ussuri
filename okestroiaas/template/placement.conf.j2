@@ -1,0 +1,19 @@
+[DEFAULT]
+debug = False
+
+[api]
+auth_strategy = keystone
+
+[keystone_authtoken]
+www_authenticate_uri = http://{{ bind_ip }}:15000
+auth_url = http://{{ bind_ip }}:15000
+memcached_servers = {{ controller01_ip }}:11211,{{ controller02_ip }}:11211,{{ controller03_ip }}:11211
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+project_name = service
+username = placement
+password = {{ keystone_pass }}
+
+[placement_database]
+connection = mysql+pymysql://placement:{{ db_password }}@{{ bind_ip }}:13306/placement

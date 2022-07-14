@@ -1,0 +1,28 @@
+[DEFAULT]
+
+[database]
+connection = mysql+pymysql://glance:{{ db_password }}@{{ bind_ip }}:13306/glance
+backend = sqlalchemy
+
+[glance_store]
+stores = file,http
+default_store = file
+filesystem_store_datadir = /var/lib/glance/images/
+
+[image_format]
+disk_formats = ami,ari,aki,vhd,vhdx,vmdk,raw,qcow2,vdi,iso,root-tar
+
+[keystone_authtoken]
+www_authenticate_uri = http://{{ bind_ip }}:15000
+auth_url = http://{{ bind_ip }}:15000
+memcached_servers = {{ controller01_ip }}:11211,{{ controller02_ip }}:11211,{{ controller03_ip }}:11211
+auth_type = password
+project_domain_name = Default
+user_domain_name = Default
+project_name = service
+username = glance
+password = {{ keystone_pass }}
+
+[paste_deploy]
+flavor = keystone
+

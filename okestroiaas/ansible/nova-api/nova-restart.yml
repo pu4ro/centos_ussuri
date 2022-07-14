@@ -1,0 +1,28 @@
+---
+  - name:  OpenStack Service_nova-api
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: nova-api-service restart
+      service:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - openstack-nova-api
+        - openstack-nova-scheduler
+        - openstack-nova-conductor
+        - openstack-nova-novncproxy
+        - httpd
+
+    - name: nova-api-service enable
+      systemd:
+        name: "{{ item }}"
+        enabled: yes
+      with_items:
+        - openstack-nova-api
+        - openstack-nova-scheduler
+        - openstack-nova-conductor
+        - openstack-nova-novncproxy
+        - httpd

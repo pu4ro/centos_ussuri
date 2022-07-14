@@ -1,0 +1,21 @@
+---
+  - name:  OpenStack Service_nova-api
+    hosts: controller01
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: DB sync
+      command: /bin/sh -c "nova-manage api_db sync"
+
+    - name: DB sync
+      command: /bin/sh -c "nova-manage cell_v2 map_cell0" 
+
+    - name: DB sync
+      command: /bin/sh -c "nova-manage cell_v2 create_cell --name=cell1 --verbose"
+     
+    - name: DB sync
+      command: /bin/sh -c "nova-manage db sync"
+
+    - name: DB sync
+      command: /bin/sh -c "placement-manage db sync"

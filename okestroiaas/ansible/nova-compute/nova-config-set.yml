@@ -1,0 +1,18 @@
+---
+  - name:  OpenStack nova-compute config edit 
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: nova-compute config file setting 
+      template: 
+        src: "{{ template_files }}" 
+        dest: /etc/nova/nova.conf
+        owner: root
+        group: nova
+        mode: 0640
+        backup: yes
+      with_items:
+        ['nova_compute.conf.j2']
+

@@ -1,0 +1,78 @@
+---
+- name: create DB container
+  hosts: controller01
+  become: true
+  vars_files:
+    - /home/ubuntu/cloudxpert/variable/mariadb_vars/main.yml 
+  tasks:
+  - name: Create Files Directory
+    file:
+      path: /root/files
+      state: directory
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: Copy configuration files
+    copy:
+      src: "{{ copy_files }}"
+      dest: /root/files
+      owner: root
+      group: root
+      mode: 0644
+    with_items:
+      ['sshd_config','ubuntu']
+
+  - name: Copy configuration files
+    copy:
+      src: "{{ copy_files }}"
+      dest: /root/files
+      owner: root
+      group: root
+      mode: 0600
+    with_items:
+      ['authorized_keys']
+
+  - name: Copy configuration files
+    template:
+      src: "{{ template_files }}"
+      dest: /root/files/interfaces
+      owner: root
+      group: root
+      mode: 0644
+    with_items:
+      ['interfaces.j2']
+
+  - name: Copy configuration files
+    template:
+      src: "{{ template_files }}"
+      dest: /root/files/sources.list
+      owner: root
+      group: root
+      mode: 0644
+    with_items:
+      ['sources.list.j2']
+
+  - name: Copy configuration files
+    template:
+      src: "{{ template_files }}"
+      dest: /root/create.sh
+      owner: root
+      group: root
+      mode: 0755
+    with_items:
+      ['create.sh.j2']
+
+  - name: create DB container
+    shell: ./create.sh >> mariadb.txt
+    args:
+      chdir: /root
+
+  - name: remove files and directories
+    file:
+      path: "{{ item }}"
+      state: absent
+    with_items:
+    - /root/create.sh
+    - /root/files/
+

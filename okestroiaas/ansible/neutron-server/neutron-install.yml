@@ -1,0 +1,15 @@
+---
+  - name:  OpenStack Service_Keystone
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: neutron-server_pakage_install  
+      yum:
+        name: 
+          - openstack-neutron
+          - openstack-neutron-ml2
+          - openstack-neutron-openvswitch
+        state: present
+

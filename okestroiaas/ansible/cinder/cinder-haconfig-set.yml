@@ -1,0 +1,17 @@
+---
+  - name:  OpenStack Service_cinder
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: cinder ha config file setting 
+      ini_file:
+        dest: /etc/cinder/cinder.conf
+        section: oslo_messaging_rabbit
+        option: '{{ item.key }}'
+        value: '{{ item.value }}'
+      with_dict:
+        rabbit_durable_queues: true
+        rabbit_ha_queues: true
+

@@ -1,0 +1,12 @@
+---
+  - name:  OpenStack Service_Keystone
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: glance_pakage_install
+      yum:
+        name:
+          - openstack-glance
+        state: present

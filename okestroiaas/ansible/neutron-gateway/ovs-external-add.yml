@@ -1,0 +1,17 @@
+---
+  - name:  OpenStack Service_Keystone
+    hosts: controller
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml
+    tasks:
+    - name: add ovs-br
+      openvswitch_bridge:
+          bridge: "{{ br_name }}"
+          state: present
+
+    - name: ovs-br port add
+      openvswitch_port:
+          bridge: br-ex
+          port: "{{ ex_nic }}"
+          state: present

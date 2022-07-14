@@ -1,0 +1,36 @@
+---
+  - name:  OpenStack Service_Keystone
+    hosts: controller01
+    become: true
+    vars_files:
+      - /root/okestroiaas/variable/common_vars/main.yml 
+    environment:
+       OS_PROJECT_DOMAIN_NAME: Default
+       OS_USER_DOMAIN_NAME: Default
+       OS_PROJECT_NAME: admin
+       OS_USERNAME: admin
+       OS_PASSWORD: "{{ keystone_pass }}"
+       OS_AUTH_URL: http://{{ bind_ip }}:15000/v3/
+       OS_IDENTITY_API_VERSION: 3
+       OS_IMAGE_API_VERSION: 2
+    tasks:
+    - name: Pause for 5 seconds
+      pause:
+        seconds: 5
+
+    - name: Create projects
+      command: 'openstack project create --domain default --description "{{ item.value }}" {{ item.key }}'
+      register: project_create
+      with_dict:
+        service: Service Project
+
+    - name: Create user role
+      command: openstack role create user
+      when: project_create is changed
+
+    - name: role create _member_
+      command: openstack role create _member_
+
+    - name: role add admin
+      command: openstack role add --project service --user admin _member_
+
